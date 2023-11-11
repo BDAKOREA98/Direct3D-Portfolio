@@ -5,8 +5,12 @@ Program::Program()
 {
 	Initialize();
 
-	scene = new TutorialScene();
+	//scene = new TutorialScene();
+	//scene = new TextureScene();
+	//scene = new TerrainScene();
+	scene = new TerrainEditorScene();
 }
+
 
 Program::~Program()
 {
@@ -18,6 +22,10 @@ Program::~Program()
 void Program::Update()
 {
 	scene->Update();
+
+	Time::GetInstance()->Update();
+	Keyboard::GetInstance()->Update();
+	Camera::GetInstance()->Update();
 }
 
 void Program::Render()
@@ -26,14 +34,30 @@ void Program::Render()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
+	if (isWireFrame)
+	{
+		RS->ChangeState(D3D11_FILL_WIREFRAME);
+	}
+	else
+	{
+		RS->ChangeState(D3D11_FILL_SOLID);
+	}
+
 	scene->PreRender();
 
 	Device::GetInstance()->Clear();
 
+	Environment::GetInstance()->SetEnvironment();
 
 	scene->Render();
+	Time::GetInstance()->Render();
+
 
 	scene->PostRender();
+	Camera::GetInstance()->PostRender();
+	Environment::GetInstance()->PostRender();
+
+	ImGui::Checkbox("WireFrame", &isWireFrame);
 
 	ImGui::Render();
 
@@ -44,30 +68,29 @@ void Program::Render()
 
 void Program::Initialize()
 {
-	Device::GetInstance();
+	//Device::GetInstance();
+	StateManager::GetInstance();
 	Environment::GetInstance();
+	Keyboard::GetInstance();
+	Time::GetInstance();
 
-	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsLight();
-
-	// Setup Platform/Renderer backends
 	ImGui_ImplWin32_Init(hWnd);
 	ImGui_ImplDX11_Init(DEVICE, DC);
 }
 
 void Program::Release()
 {
+	Time::Delete();
 	Device::Delete();
 	Shader::Delete();
+	Keyboard::Delete();
 	Environment::Delete();
+	StateManager::Delete();
+	Camera::Delete();
+	Texture::Delete();
 
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();

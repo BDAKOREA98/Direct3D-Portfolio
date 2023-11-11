@@ -11,7 +11,15 @@ private:
 	void CreatePerspective();
 
 public:
+	void SetEnvironment();
+
+	void PostRender();
+
+	Matrix GetProjMatrix() { return projMatrix; }
 
 private:
+	MatrixBuffer*  projBuffer;
+	Matrix         projMatrix;
 
+	 LightBuffer* lightBuffer;
 };

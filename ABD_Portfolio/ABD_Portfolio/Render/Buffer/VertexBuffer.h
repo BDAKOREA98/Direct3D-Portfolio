@@ -9,6 +9,8 @@ public:
 
 	void IASetBuffer(D3D11_PRIMITIVE_TOPOLOGY type = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+    void UpdateVertex(void* data, UINT count);
+
 private:
 	ID3D11Buffer* vertexBuffer;
 

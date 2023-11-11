@@ -9,7 +9,7 @@ PixelShader::PixelShader(wstring file)
     (
         file.c_str(),
         nullptr,
-        nullptr,
+        D3D_COMPILE_STANDARD_FILE_INCLUDE,
         "main",
         "ps_5_0",
         flags,
