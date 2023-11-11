@@ -135,4 +135,7 @@ void TutorialScene::Render()
 
 void TutorialScene::PostRender()
 {
+
+    ImGui::Text("dddddddd");
+
 }

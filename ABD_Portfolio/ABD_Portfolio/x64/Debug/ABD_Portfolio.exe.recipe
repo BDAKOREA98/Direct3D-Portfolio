@@ -2,15 +2,15 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\82103\Desktop\ABD_Portfolio\x64\Debug\ABD_Portfolio.exe</FullPath>
+      <FullPath>C:\Users\82103\Desktop\BDA\Github\Direct3D-Portfolio\ABD_Portfolio\x64\Debug\ABD_Portfolio.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\82103\Desktop\ABD_Portfolio\x64\Debug\PixelTutorial.cso</FullPath>
+      <FullPath>C:\Users\82103\Desktop\BDA\Github\Direct3D-Portfolio\ABD_Portfolio\x64\Debug\PixelTutorial.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\82103\Desktop\ABD_Portfolio\x64\Debug\VertexTutorial.cso</FullPath>
+      <FullPath>C:\Users\82103\Desktop\BDA\Github\Direct3D-Portfolio\ABD_Portfolio\x64\Debug\VertexTutorial.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
