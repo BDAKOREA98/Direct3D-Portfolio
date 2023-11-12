@@ -1,4 +1,4 @@
-#include "Framework.h"
+#include "framework.h"
 #include "RawBuffer.h"
 
 RawBuffer::RawBuffer(void* inputData, UINT byteWidth)

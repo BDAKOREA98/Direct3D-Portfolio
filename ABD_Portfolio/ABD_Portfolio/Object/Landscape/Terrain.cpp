@@ -1,4 +1,4 @@
-#include "Framework.h"
+#include "framework.h"
 #include "Terrain.h"
 
 Terrain::Terrain(wstring diffuseFile, wstring heightFile)

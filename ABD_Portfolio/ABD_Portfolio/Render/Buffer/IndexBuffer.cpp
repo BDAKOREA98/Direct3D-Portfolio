@@ -1,4 +1,4 @@
-#include "Framework.h"
+#include "framework.h"
 #include "IndexBuffer.h"
 
 IndexBuffer::IndexBuffer(vector<UINT>& indices)

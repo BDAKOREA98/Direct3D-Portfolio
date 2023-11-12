@@ -1,4 +1,4 @@
-#include "Framework.h"
+#include "framework.h"
 #include "Texture.h"
 
 map<wstring, Texture*> Texture::textures = {};

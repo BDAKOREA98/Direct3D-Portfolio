@@ -127,3 +127,29 @@ public:
 		Vector3 color = { 0.0f, 0.5f, 0.0f };
 	} data;
 };
+
+
+class WorldBuffer : public ConstBuffer
+{
+public:
+	WorldBuffer()
+		: ConstBuffer(&data, sizeof(Data))
+	{
+		data.view = XMMatrixIdentity();
+		data.hasAnimation = 0;
+	}
+
+	void SetData(Matrix view, int hasAnimation = false)
+	{
+		data.view = XMMatrixTranspose(view);
+		data.hasAnimation = hasAnimation;
+	}
+
+private:
+	struct Data
+	{
+		Matrix  view;
+		int     hasAnimation;
+		Vector3 padding;
+	} data;
+};

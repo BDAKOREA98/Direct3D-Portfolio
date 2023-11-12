@@ -55,9 +55,19 @@ using namespace DirectX;
 
 #define CAMERA Camera::GetInstance()->GetTransform()
 
+#define SCENE SceneManager::GetInstance()
+
 #define RS StateManager::GetInstance()->GetRS()
 
 #define Dialog ImGuiFileDialog::Instance()
+
+#define MAX_BONE 256
+#define MAX_FRAME_KEY 512
+
+#define MAX_INSTANCE 128
+#define MAX_LIGHT    10
+
+#define LERP(start, end, t) (start + (end - start) * t)
 
 typedef XMMATRIX Matrix;
 typedef XMFLOAT4 Vector4;
@@ -70,8 +80,10 @@ typedef XMFLOAT2 Vector2;
 #include "Utility/Utility.h"
 #include "Utility/BinaryReader.h"
 #include "Utility/BinaryWriter.h"
+#include "Utility/MyMath.h"
 
 using namespace Utility;
+using namespace MyMath;
 
 #include "Object/Transform.h"
 
@@ -90,13 +102,20 @@ using namespace Utility;
 #include "Render/Buffer/RawBuffer.h"
 #include "Render/Buffer/StructuredBuffer.h"
 
+
 #include "Render/Texture/Texture.h"
 #include "Render/Mesh.h"
 #include "Render/Material.h"
 
 #include "Render/State/SamplerState.h"
 #include "Render/State/RasterizerState.h"
+
+
 #include "Render/State/StateManager.h"
+
+
+
+
 
 #include "System/Environment.h"
 #include "System/Camera.h"
@@ -109,11 +128,16 @@ using namespace Utility;
 #include "Object/Landscape/Terrain.h"
 #include "Object/Landscape/TerrainEditor.h"
 
+
 #include "Scene/Scene.h"
 #include "Scene/TutorialScene.h"
 #include "Scene/TextureScene.h"
 #include "Scene/TerrainScene.h"
 #include "Scene/TerrainEditorScene.h"
+
+#include "Scene/GridScene.h"
+#include "Scene/SceneManager.h"
+
 
 #include "Program.h"
 

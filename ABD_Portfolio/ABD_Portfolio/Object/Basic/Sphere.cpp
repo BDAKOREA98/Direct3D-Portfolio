@@ -1,4 +1,4 @@
-#include "Framework.h"
+#include "framework.h"
 #include "Sphere.h"
 
 Sphere::Sphere(float radius, UINT sliceCount, UINT stackCount)

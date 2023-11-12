@@ -3,25 +3,30 @@
 
 Program::Program()
 {
+	srand(time(NULL));
+
 	Initialize();
 
-	//scene = new TutorialScene();
-	//scene = new TextureScene();
-	//scene = new TerrainScene();
-	scene = new TerrainEditorScene();
+
+	SCENE->Create("Grid", new GridScene());
+	
+	SCENE->Create("Start", new TerrainEditorScene());
+
+	SCENE->Add("Grid");
+	SCENE->Add("Start");
 }
 
 
 Program::~Program()
 {
-	delete scene;
+	SceneManager::Delete();
 
 	Release();
 }
 
 void Program::Update()
 {
-	scene->Update();
+	SCENE->Update();
 
 	Time::GetInstance()->Update();
 	Keyboard::GetInstance()->Update();
@@ -43,17 +48,17 @@ void Program::Render()
 		RS->ChangeState(D3D11_FILL_SOLID);
 	}
 
-	scene->PreRender();
+	SCENE->PreRender();
 
 	Device::GetInstance()->Clear();
 
 	Environment::GetInstance()->SetEnvironment();
 
-	scene->Render();
+	SCENE->Render();
 	Time::GetInstance()->Render();
 
 
-	scene->PostRender();
+	SCENE->PostRender();
 	Camera::GetInstance()->PostRender();
 	Environment::GetInstance()->PostRender();
 

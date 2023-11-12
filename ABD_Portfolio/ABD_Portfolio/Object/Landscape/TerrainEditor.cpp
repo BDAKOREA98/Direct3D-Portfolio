@@ -1,4 +1,4 @@
-#include "Framework.h"
+#include "framework.h"
 #include "TerrainEditor.h"
 
 TerrainEditor::TerrainEditor(UINT height, UINT width)

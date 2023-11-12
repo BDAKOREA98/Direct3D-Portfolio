@@ -53,12 +53,12 @@ struct Vector3
 	Vector3 GetNormalized() { return XMVector3Normalize(*this); }
 
 
-	static Vector3 Cross(Vector3& v1, Vector3& v2)
+	static Vector3 Cross(Vector3 v1, Vector3 v2)
 	{
 		return XMVector3Cross(v1, v2);
 	}
 
-	static float Dot(Vector3& v1, Vector3& v2)
+	static float Dot(Vector3 v1, Vector3 v2)
 	{
 		return XMVectorGetX(XMVector3Dot(v1, v2));
 	}
@@ -141,6 +141,26 @@ struct Vector3
 		//TODO : Coord버전 구분하기
 
 		return XMVector3TransformNormal(*this, value);
+	}
+
+	float operator[](const UINT& index)
+	{
+		switch (index)
+		{
+		case 0: 
+			return x;
+		case 1:
+			return y;
+		case 2:
+			return z;
+		default:
+			return 0.0f;
+		}
+	}
+
+	bool operator==(const Vector3& other)
+	{
+		return (this->x == other.x) && (this->y == other.y) && (this->z == other.z);
 	}
 
 	float x = 0.0f;

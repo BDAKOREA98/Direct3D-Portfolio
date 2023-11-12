@@ -15,7 +15,7 @@ private:
 	void Release();
 
 private:
-	Scene* scene = nullptr;
+	
 	bool isWireFrame = false;
 
 };

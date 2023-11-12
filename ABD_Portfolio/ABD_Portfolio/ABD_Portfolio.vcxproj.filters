@@ -33,9 +33,6 @@
     <ClInclude Include="Scene\Scene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\TutorialScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="System\Device.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -90,12 +87,6 @@
     <ClInclude Include="Scene\TerrainEditorScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\TerrainScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\TextureScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Render\Material.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -147,6 +138,15 @@
     <ClInclude Include="Object\Basic\TextureCube.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Utility\MyMath.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GridScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ABD_Portfolio.cpp">
@@ -156,9 +156,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Program.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\TutorialScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="System\Device.cpp">
@@ -212,12 +209,6 @@
     <ClCompile Include="Scene\TerrainEditorScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\TerrainScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\TextureScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Render\Material.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -264,6 +255,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Object\Basic\TextureCube.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\MyMath.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GridScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

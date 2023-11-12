@@ -1,4 +1,4 @@
-#include "Framework.h"
+#include "framework.h"
 #include "Quad.h"
 
 Quad::Quad(Vector2 size)

@@ -1,9 +1,26 @@
-#include "Framework.h"
+#include "framework.h"
 #include "BinaryWriter.h"
+
+BinaryWriter::BinaryWriter(string path)
+{
+	if (!StartsWith(path, "_"))
+		path = "_TextData/" + path;
+
+	file = CreateFileA
+	(
+		path.c_str(),
+		GENERIC_WRITE,
+		0, 0,
+		CREATE_ALWAYS,
+		FILE_ATTRIBUTE_NORMAL,
+		nullptr
+	);
+}
 
 BinaryWriter::BinaryWriter(wstring path)
 {
-	path = L"_TextData/" + path;
+	if (!StartsWith(path, L"_"))
+		path = L"_TextData/" + path;
 
 	file = CreateFile
 	(
@@ -61,7 +78,30 @@ void BinaryWriter::WriteData(Vector3 data)
 	WriteData(data.z);
 }
 
+void BinaryWriter::WriteData(Vector4 data)
+{
+	WriteData(data.x);
+	WriteData(data.y);
+	WriteData(data.z);
+	WriteData(data.w);
+}
+
 void BinaryWriter::WriteData(void* data, UINT dataSize)
 {
 	WriteFile(file, data, dataSize, &size, nullptr);
+}
+
+void BinaryWriter::WriteData(XMFLOAT4X4 data)
+{
+	WriteFile(file, &data, sizeof(XMFLOAT4X4), &size, nullptr);
+}
+
+void BinaryWriter::WriteData(Matrix data)
+{
+	WriteFile(file, &data, sizeof(Matrix), &size, nullptr);
+}
+
+void BinaryWriter::WriteData(size_t data)
+{
+	WriteData((UINT)data);
 }

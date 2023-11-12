@@ -1,15 +1,37 @@
-#include "Framework.h"
+#include "framework.h"
 #include "BinaryReader.h"
 
 BinaryReader::BinaryReader(wstring path)
 {
-	path = L"_TextData/" + path;
+	if (!StartsWith(path, L"_"))
+		path = L"_TextData/" + path;
+
+	assert(PathFileExists(path.c_str()));
 
 	file = CreateFile
 	(
 		path.c_str(),
 		GENERIC_READ,
 		FILE_SHARE_READ, 
+		0,
+		OPEN_EXISTING,
+		FILE_ATTRIBUTE_NORMAL,
+		nullptr
+	);
+}
+
+BinaryReader::BinaryReader(string path)
+{
+	if (!StartsWith(path, "_"))
+		path = "_TextData/" + path;
+
+	assert(PathFileExistsA(path.c_str()));
+
+	file = CreateFileA
+	(
+		path.c_str(),
+		GENERIC_READ,
+		FILE_SHARE_READ,
 		0,
 		OPEN_EXISTING,
 		FILE_ATTRIBUTE_NORMAL,
@@ -82,6 +104,36 @@ Vector3 BinaryReader::ReadVector3()
 	data.x = ReadFloat();
 	data.y = ReadFloat();
 	data.z = ReadFloat();
+
+	return data;
+}
+
+Vector4 BinaryReader::ReadVector4()
+{
+	Vector4 data;
+
+	data.x = ReadFloat();
+	data.y = ReadFloat();
+	data.z = ReadFloat();
+	data.w = ReadFloat();
+
+	return data;
+}
+
+XMFLOAT4X4 BinaryReader::ReadFloat4X4()
+{
+	XMFLOAT4X4 data;
+
+	ReadFile(file, &data, sizeof(XMFLOAT4X4), &size, nullptr);
+
+	return data;
+}
+
+Matrix BinaryReader::ReadMatrix()
+{
+	Matrix data;
+
+	ReadFile(file, &data, sizeof(Matrix), &size, nullptr);
 
 	return data;
 }

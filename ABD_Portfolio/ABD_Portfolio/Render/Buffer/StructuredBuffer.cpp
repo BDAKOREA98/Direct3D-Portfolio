@@ -1,4 +1,4 @@
-#include "Framework.h"
+#include "framework.h"
 #include "StructuredBuffer.h"
 
 StructuredBuffer::StructuredBuffer(void* inputData, UINT inputStride, UINT inputCount, UINT outputStride, UINT outputCount)

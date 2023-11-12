@@ -1,4 +1,4 @@
-#include "Framework.h"
+#include "framework.h"
 #include "ComputeShader.h"
 
 ComputeShader::ComputeShader(wstring file)
