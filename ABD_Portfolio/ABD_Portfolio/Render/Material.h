@@ -14,27 +14,42 @@ public:
 
 	void SetMaterial();
 
-	void SetDiffuseMap (wstring file);
+	void SetDiffuseMap(Texture* texture);
+	void SetDiffuseMap(wstring file);
 	void SetSpecularMap(wstring file);
-	void SetNormalMap  (wstring file);
+	void SetNormalMap(wstring file);
 
 	MaterialBuffer* GetBuffer() { return buffer; }
 
-	void PostRender();
+	void Debug();
 
 	void SelectMap();
 
+	void Save(wstring file);
+	void Load(wstring file);
+
+	void SaveDialog();
+	void LoadDialog();
+
+	void SetLabel(string label) { this->label = label; }
+
+	string GetLabel() { return label; }
+
+	Texture* GetDiffuseMap() { return diffuseMap; }
+
 private:
-    VertexShader* vertexShader = nullptr;
-     PixelShader*  pixelShader = nullptr;
+	VertexShader* vertexShader = nullptr;
+	PixelShader* pixelShader = nullptr;
 
-	 Texture*  diffuseMap = nullptr;
-	 Texture* specularMap = nullptr;
-	 Texture*   normalMap = nullptr;
+	Texture* diffuseMap = nullptr;
+	Texture* specularMap = nullptr;
+	Texture* normalMap = nullptr;
 
-	 MaterialBuffer* buffer = nullptr;
+	MaterialBuffer* buffer = nullptr;
 
-	 string projectDir;
-	 
-	 static string ID;
+	string projectDir;
+
+	static int ID;
+
+	string label = "";
 };

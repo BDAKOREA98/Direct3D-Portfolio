@@ -7,19 +7,28 @@ private:
 	Environment();
 	~Environment();
 
-	void CreateViewport();
 	void CreatePerspective();
+	void CreateOrthographic();
+
+	void DebugLight(int lightIndex);
 
 public:
+	void SetViewport(UINT width = WIN_WIDTH, UINT height = WIN_HEIGHT);
 	void SetEnvironment();
+	void PostSet();
 
 	void PostRender();
 
-	Matrix GetProjMatrix() { return projMatrix; }
+	Matrix GetPersMatrix() { return persMatrix; }
 
 private:
-	MatrixBuffer*  projBuffer;
-	Matrix         projMatrix;
+	MatrixBuffer* persBuffer;
+	Matrix         persMatrix;
 
-	 LightBuffer* lightBuffer;
+	MatrixBuffer* orthoBuffer;
+	Matrix         orthoMatrix;
+
+	ViewBuffer* UIViewBuffer;
+
+	LightBuffer* lightBuffer;
 };

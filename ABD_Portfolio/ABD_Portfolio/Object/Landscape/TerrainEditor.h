@@ -3,7 +3,23 @@
 
 class TerrainEditor : public Transform
 {
-	typedef VertexTextureNormalTangent VertexType;
+	typedef VertexTextureNormalTangentAlpha VertexType;
+
+	struct InputDesc
+	{
+		UINT index;
+
+		Vector3 v0, v1, v2;
+	};
+
+	struct OutputDesc
+	{
+		int isPicked = 0;
+
+		float u, v;
+
+		float distance;
+	};
 public:
 	TerrainEditor(UINT height = 100, UINT width = 100);
 	~TerrainEditor();
@@ -30,15 +46,14 @@ private:
 	void CreateCompute();
 
 	void AdjustHeight();
+	void AdjustAlpha();
 
 private:
 	vector<VertexType> vertices;
 	vector<UINT>        indices;
 
 	Material* material;
-	Mesh*     mesh;
-
-	MatrixBuffer* worldBuffer;
+	Mesh* mesh;
 
 	UINT  width;
 	UINT height;
@@ -49,28 +64,14 @@ private:
 
 	////ComputeShader
 
-	struct InputDesc
-	{
-		UINT index;
-
-		Vector3 v0, v1, v2;
-	};
-
-	struct OutputDesc
-	{
-		int isPicked = 0;
-
-		float u, v;
-
-		float distance;
-	};
+	
 
 	StructuredBuffer* structuredBuffer;
-	       RayBuffer*        rayBuffer;
+	RayBuffer* rayBuffer;
 
 	ComputeShader* computeShader;
 
-	 InputDesc*  input = nullptr;
+	InputDesc* input = nullptr;
 	OutputDesc* output = nullptr;
 
 	UINT polygonCount;
@@ -82,4 +83,13 @@ private:
 	float adjustValue = 20.0f;
 
 	bool isRaise = true;
+	bool active = true;
+	////alphaMap
+
+	Texture* alphaMap = nullptr;
+	Texture* secondMap = nullptr;
+
+	UINT selectedMap = 0;
+
+	bool adjustAlpha = true;
 };

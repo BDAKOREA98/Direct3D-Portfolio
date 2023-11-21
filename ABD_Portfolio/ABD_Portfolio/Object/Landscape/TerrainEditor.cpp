@@ -4,13 +4,10 @@
 TerrainEditor::TerrainEditor(UINT height, UINT width)
 	:height(height), width(width)
 {
-	material = new Material;
-	material->SetShader(L"TerrainBrush");
-
-	worldBuffer = new MatrixBuffer;
+	material = new Material(L"TerrainBrush");
 
 	BinaryReader data(L"HeightMap");
-
+	
 	if (data.Succeeded())
 	{
 		wstring heightPath = data.ReadWString();
@@ -31,9 +28,10 @@ TerrainEditor::TerrainEditor(UINT height, UINT width)
 
 	brushBuffer = new BrushBuffer;
 
+	//////////////////////
 
-
-
+	alphaMap = Texture::Get(L"HeightMap/AlphaMap.png");
+	secondMap = Texture::Get(L"LandScape/Box.png");
 }
 
 TerrainEditor::~TerrainEditor()
@@ -44,10 +42,8 @@ TerrainEditor::~TerrainEditor()
 
 		data.WriteData(heightMap->GetPath());
 	}
-	
 
 	delete mesh;
-	delete worldBuffer;
 	delete material;
 
 	delete[]  input;
@@ -65,7 +61,12 @@ void TerrainEditor::Update()
 	brushBuffer->data.location = pickedPos;
 
 	if (Picking(&pickedPos) && KEY_PRESS(VK_LBUTTON) && !ImGui::GetIO().WantCaptureMouse)
-		AdjustHeight();
+	{
+		if (active)
+			AdjustHeight();
+		else if(adjustAlpha)
+			AdjustAlpha();
+	}
 
 	if (KEY_PRESS(VK_LSHIFT))
 		isRaise = false;
@@ -75,38 +76,71 @@ void TerrainEditor::Update()
 
 void TerrainEditor::Render()
 {
-	worldBuffer->SetData(world);
-	worldBuffer->SetVSBuffer(0);
+	Transform::SetWorld();
 
-	    mesh->SetMesh();
+	mesh->SetMesh();
 	material->SetMaterial();
 
 	brushBuffer->SetPSBuffer(10);
 
+	if (alphaMap)
+	{
+		alphaMap->PSSetShaderResources(10);
+	}
+
+	if (secondMap)
+		secondMap->PSSetShaderResources(11);
+
 	DC->DrawIndexed(indices.size(), 0, 0);
+
+	
+
 }
 
 void TerrainEditor::Debug()
 {
-	ImGui::Text("PickedPos : %.1f, %.1f, %.1f", pickedPos.x, pickedPos.y, pickedPos.z);
-	ImGui::ColorEdit3("BrushColor", (float*)&brushBuffer->data.color);
-	ImGui::SliderFloat("BrushIntensity", &adjustValue, 1.0f, 50.0f);
-	ImGui::SliderFloat("BrushRange", &brushBuffer->data.range, 1.0f, 50.0f);
+	if (ImGui::BeginChild("TerrainEditor", ImVec2(250, 120), true))
+	{
+		ImGui::Text("PickedPos : %.1f, %.1f, %.1f", pickedPos.x, pickedPos.y, pickedPos.z);
 
-	const char* typeList[] = { "Circle", "Rect" };
+		if (ImGui::BeginMenu("TerrainBrush"))
+		{
+			ImGui::ColorEdit3("BrushColor", (float*)&brushBuffer->data.color);
+			ImGui::SliderFloat("BrushIntensity", &adjustValue, 1.0f, 100.0f);
+			ImGui::SliderFloat("BrushRange", &brushBuffer->data.range, 1.0f, 50.0f);
 
-	ImGui::Combo("BrushType", &brushBuffer->data.type, typeList, 2);
+			const char* typeList[] = { "Circle", "Rect", "xAsix"};
 
-	SaveHeightDialog();
-	LoadHeightDialog();
+			ImGui::Combo("BrushType", &brushBuffer->data.type, typeList, 3);
+
+			ImGui::Checkbox("AdjustAlpha", &adjustAlpha);
+			ImGui::Checkbox("HeightMap", &active);
+			ImGui::Checkbox("HasAlphaMap", (bool*)&material->GetBuffer()->data.hasAlphaMap);
+
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Save/Load HeightMap"))
+		{
+			SaveHeightDialog();
+			LoadHeightDialog();
+
+			ImGui::EndMenu();
+		}
+
+		material->Debug();
+	}
+
+	ImGui::EndChild();
+
 }
 
 bool TerrainEditor::Picking(OUT Vector3* position)
 {
 	Ray ray = Camera::GetInstance()->ScreenPointToRay(mousePos);
 
-	rayBuffer->data.origin     = ray.origin;
-	rayBuffer->data.direction  = ray.direction;
+	rayBuffer->data.origin = ray.origin;
+	rayBuffer->data.direction = ray.direction;
 	rayBuffer->data.outputSize = polygonCount;
 
 	rayBuffer->SetCSBuffer(0);
@@ -128,7 +162,7 @@ bool TerrainEditor::Picking(OUT Vector3* position)
 
 	for (UINT i = 0; i < polygonCount; i++)
 	{
-		if (output[i].isPicked) 
+		if (output[i].isPicked)
 		{
 			if (minDistance > output[i].distance)
 			{
@@ -169,11 +203,11 @@ void TerrainEditor::SaveHeightMap(wstring file)
 
 	Image image;
 
-	image.width      = width;
-	image.height     = height;
-	image.pixels     = pixels;
-	image.format     = DXGI_FORMAT_R8G8B8A8_UNORM;
-	image.rowPitch   = width * 4;
+	image.width = width;
+	image.height = height;
+	image.pixels = pixels;
+	image.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	image.rowPitch = width * 4;
 	image.slicePitch = size;
 
 	SaveToWICFile(image, WIC_FLAGS_FORCE_RGB, GetWICCodec(WIC_CODEC_PNG), file.c_str());
@@ -187,15 +221,15 @@ void TerrainEditor::LoadHeightMap(wstring file)
 		delete mesh;
 
 	vertices.clear();
-	 indices.clear();
+	indices.clear();
 
-	 CreateMesh();
-	 CreateNormal();
-	 CreateTangent();
+	CreateMesh();
+	CreateNormal();
+	CreateTangent();
 
-	 mesh = new Mesh(vertices, indices);
+	mesh = new Mesh(vertices, indices);
 
-	 CreateCompute();
+	CreateCompute();
 }
 
 void TerrainEditor::SaveHeightDialog()
@@ -248,7 +282,7 @@ void TerrainEditor::CreateMesh()
 
 	if (heightMap != nullptr)
 	{
-		 width = heightMap->GetSize().x;
+		width = heightMap->GetSize().x;
 		height = heightMap->GetSize().y;
 
 		colors = heightMap->ReadPixels();
@@ -262,7 +296,7 @@ void TerrainEditor::CreateMesh()
 			VertexType vertex;
 			vertex.pos = Vector3(x, 0, z);
 
-			vertex.uv.x =     x / (width  - 1);
+			vertex.uv.x = x / (width - 1);
 			vertex.uv.y = 1 - z / (height - 1);
 
 			if (colors.size() > 0)
@@ -327,7 +361,7 @@ void TerrainEditor::CreateTangent()
 		UINT index0 = indices[i * 3 + 0];
 		UINT index1 = indices[i * 3 + 1];
 		UINT index2 = indices[i * 3 + 2];
-		
+
 		Vector3 p0 = vertices[index0].pos;
 		Vector3 p1 = vertices[index1].pos;
 		Vector3 p2 = vertices[index2].pos;
@@ -405,13 +439,15 @@ void TerrainEditor::CreateCompute()
 
 void TerrainEditor::AdjustHeight()
 {
+	adjustValue = 50.0f;
+
 	switch (brushBuffer->data.type)
 	{
 	case 0:
 		for (VertexType& vertex : vertices)
 		{
 			Vector3 p1 = Vector3(vertex.pos.x, 0.0f, vertex.pos.z);
-			Vector3 p2 = Vector3( pickedPos.x, 0.0f,  pickedPos.z);
+			Vector3 p2 = Vector3(pickedPos.x, 0.0f, pickedPos.z);
 
 			float distance = (p1 - p2).Length();
 
@@ -424,11 +460,7 @@ void TerrainEditor::AdjustHeight()
 				else
 					vertex.pos.y -= value * Time::Delta();
 
-				if (vertex.pos.y > MAP_HEIGHT)
-					vertex.pos.y = MAP_HEIGHT;
-
-				if (vertex.pos.y < 0)
-					vertex.pos.y = 0;
+				vertex.pos.y = Clamp(vertex.pos.y, 0.0f, MAP_HEIGHT);
 			}
 		}
 		break;
@@ -436,11 +468,11 @@ void TerrainEditor::AdjustHeight()
 		for (VertexType& vertex : vertices)
 		{
 			Vector3 p1 = Vector3(vertex.pos.x, 0.0f, vertex.pos.z);
-			Vector3 p2 = Vector3( pickedPos.x, 0.0f,  pickedPos.z);
+			Vector3 p2 = Vector3(pickedPos.x, 0.0f, pickedPos.z);
 
-			Vector3 distance = p1 - p2;			
+			Vector3 distance = p1 - p2;
 
-			if (abs(distance.x) <= brushBuffer->data.range && 
+			if (abs(distance.x) <= brushBuffer->data.range &&
 				abs(distance.z) <= brushBuffer->data.range)
 			{
 				if (isRaise)
@@ -448,14 +480,116 @@ void TerrainEditor::AdjustHeight()
 				else
 					vertex.pos.y -= adjustValue * Time::Delta();
 
-				if (vertex.pos.y > MAP_HEIGHT)
-					vertex.pos.y = MAP_HEIGHT;
-
-				if (vertex.pos.y < 0)
-					vertex.pos.y = 0;
+				vertex.pos.y = Clamp(vertex.pos.y, 0.0f, MAP_HEIGHT);
 			}
 		}
 		break;
+	case 2:
+		for (VertexType& vertex : vertices)
+		{
+			Vector3 p1 = Vector3(0.0f, vertex.pos.y, vertex.pos.z);
+			Vector3 p2 = Vector3(0.0f, pickedPos.y, pickedPos.z);
+			
+			float distance = (p1 - p2).Length();
+
+			float value = adjustValue * max(0, cos(XM_PIDIV2 * (1.0f - distance / brushBuffer->data.range)));
+
+			if (distance <= brushBuffer->data.range)
+			{
+				if (isRaise)
+					vertex.pos.x += value * Time::Delta(); 
+				else
+					vertex.pos.x -= value * Time::Delta(); 
+
+				if (vertex.pos.x > width) // Adjust the boundary for X-axis
+					vertex.pos.x = width;
+
+				if (vertex.pos.x < 0) // Adjust the boundary for X-axis
+					vertex.pos.x = 0;
+			}
+		}
+		break;
+
+
+
+
+	default:
+		break;
+	}
+
+	CreateNormal();
+	CreateTangent();
+
+	mesh->UpdateVertex(vertices.data(), vertices.size());
+
+	for (UINT i = 0; i < polygonCount; i++)
+	{
+		input[i].index = i;
+
+		UINT index0 = indices[i * 3 + 0];
+		UINT index1 = indices[i * 3 + 1];
+		UINT index2 = indices[i * 3 + 2];
+
+		input[i].v0 = vertices[index0].pos;
+		input[i].v1 = vertices[index1].pos;
+		input[i].v2 = vertices[index2].pos;
+	}
+
+	structuredBuffer->UpdateInput(input);
+}
+
+void TerrainEditor::AdjustAlpha()
+{
+	adjustValue = 5.0f;
+
+	switch (brushBuffer->data.type)
+	{
+	case 0:
+		for (VertexType& vertex : vertices)
+		{
+			Vector3 p1 = Vector3(vertex.pos.x, 0.0f, vertex.pos.z);
+			Vector3 p2 = Vector3(pickedPos.x, 0.0f, pickedPos.z);
+
+			float distance = (p1 - p2).Length();
+
+			float value = adjustValue * max(0, cos(XM_PIDIV2 * distance / brushBuffer->data.range));
+
+			if (distance <= brushBuffer->data.range)
+			{
+				if (isRaise)
+					vertex.alpha[selectedMap] += value * Time::Delta();
+				else
+					vertex.alpha[selectedMap] -= value * Time::Delta();
+
+				vertex.alpha[selectedMap] = Saturate(vertex.alpha[selectedMap]);
+			}
+		}
+		break;
+	case 1:
+		for (VertexType& vertex : vertices)
+		{
+			Vector3 p1 = Vector3(vertex.pos.x, 0.0f, vertex.pos.z);
+			Vector3 p2 = Vector3(pickedPos.x, 0.0f, pickedPos.z);
+
+			Vector3 distance = p1 - p2;
+
+			if (abs(distance.x) <= brushBuffer->data.range &&
+				abs(distance.z) <= brushBuffer->data.range)
+			{
+				if (isRaise)
+					vertex.alpha[selectedMap] += adjustValue * Time::Delta();
+				else
+					vertex.alpha[selectedMap] -= adjustValue * Time::Delta();
+
+				vertex.alpha[selectedMap] = Saturate(vertex.alpha[selectedMap]);
+			}
+		}
+		break;
+	
+
+		break;
+
+
 	default:
 		break;
 	}

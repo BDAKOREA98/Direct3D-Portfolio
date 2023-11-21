@@ -1,4 +1,4 @@
-#include "framework.h"
+#include "Framework.h"
 #include "Mesh.h"
 
 Mesh::~Mesh()
@@ -10,5 +10,5 @@ Mesh::~Mesh()
 void Mesh::SetMesh(D3D11_PRIMITIVE_TOPOLOGY type)
 {
 	vertexBuffer->IASetBuffer(type);
-     indexBuffer->IASetBuffer();
+	indexBuffer->IASetBuffer();
 }

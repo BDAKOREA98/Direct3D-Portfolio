@@ -8,7 +8,6 @@ struct VertexOutput
     float3 tangent : TANGENT;
     float3 binormal : BINORMAL;
     float3 viewDir : VIEWDIR;
-    
     float3 worldPos : POSITION;
 };
 
@@ -33,6 +32,7 @@ VertexOutput main(VertexTextureNormalTangent input)
     output.tangent = normalize(mul(input.tangent, (float3x3) world));
     
     output.binormal = cross(output.normal, output.tangent);
+    
     
     return output;
 }

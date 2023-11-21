@@ -10,10 +10,10 @@ Program::Program()
 
 	SCENE->Create("Grid", new GridScene());
 	
-	SCENE->Create("Start", new TerrainEditorScene());
+	SCENE->Create("Map Tool", new TerrainEditorScene());
 
 	SCENE->Add("Grid");
-	SCENE->Add("Start");
+	SCENE->Add("Map Tool");
 }
 
 
@@ -59,7 +59,7 @@ void Program::Render()
 
 
 	SCENE->PostRender();
-	Camera::GetInstance()->PostRender();
+	Camera::GetInstance()->Debug();
 	Environment::GetInstance()->PostRender();
 
 	ImGui::Checkbox("WireFrame", &isWireFrame);

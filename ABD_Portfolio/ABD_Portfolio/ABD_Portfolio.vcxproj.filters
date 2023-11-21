@@ -147,6 +147,27 @@
     <ClInclude Include="Scene\GridScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Collider\Collider.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider\ColliderBox.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider\ColliderCapsule.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider\ColliderSphere.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\State\BlendState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\State\DepthStencilState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Shader\GeometryShader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ABD_Portfolio.cpp">
@@ -266,6 +287,27 @@
     <ClCompile Include="Scene\GridScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Collider\Collider.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider\ColliderBox.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider\ColliderCapsule.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider\ColliderSphere.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\State\BlendState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\State\DepthStencilState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Shader\GeometryShader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="__Other\ABD_Portfolio.rc">
@@ -297,6 +339,11 @@
     <FxCompile Include="_Shader\VertexSpecular.hlsl" />
     <FxCompile Include="_Shader\VertexTerrainBrush.hlsl" />
     <FxCompile Include="_Shader\VertexTexture.hlsl" />
+    <FxCompile Include="_Shader\VertexCollider.hlsl" />
+    <FxCompile Include="_Shader\PixelCollider.hlsl" />
+    <FxCompile Include="_Shader\PixelGeometryBuffer.hlsl" />
+    <FxCompile Include="_Shader\VertexGeometryBuffer.hlsl" />
+    <FxCompile Include="_Shader\GeometryShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shader\Header.hlsli" />

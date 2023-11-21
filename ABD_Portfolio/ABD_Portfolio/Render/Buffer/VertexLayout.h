@@ -34,6 +34,7 @@ struct VertexColor
     XMFLOAT3 pos = {};
     XMFLOAT4 color = {};
 };
+
 struct VertexTexture
 {
     VertexTexture()
@@ -46,7 +47,7 @@ struct VertexTexture
     }
 
     Vector3 pos = {};
-    Vector2 uv  = {};
+    Vector2 uv = {};
 };
 
 struct VertexTextureNormal
@@ -60,8 +61,8 @@ struct VertexTextureNormal
     {
     }
 
-    Vector3 pos    = {};
-    Vector2 uv     = {};
+    Vector3 pos = {};
+    Vector2 uv = {};
     Vector3 normal = {};
 };
 
@@ -76,8 +77,8 @@ struct VertexColorNormal
     {
     }
 
-    Vector3 pos    = {};
-    Vector4 color  = {};
+    Vector3 pos = {};
+    Vector4 color = {};
     Vector3 normal = {};
 };
 
@@ -92,8 +93,42 @@ struct VertexTextureNormalTangent
     {
     }
 
-    Vector3 pos     = {};
-    Vector2 uv      = {};
-    Vector3 normal  = {};
+    Vector3 pos = {};
+    Vector2 uv = {};
+    Vector3 normal = {};
     Vector3 tangent = {};
+};
+
+struct VertexTextureNormalTangentAlpha
+{
+    VertexTextureNormalTangentAlpha()
+    {
+    }
+
+    Vector3 pos = {};
+    Vector2 uv = {};
+    Vector3 normal = {};
+    Vector3 tangent = {};
+    float   alpha[4] = {};
+};
+
+
+struct VertexTextureNormalTangentBlend
+{
+    VertexTextureNormalTangentBlend()
+    {
+    }
+
+    Vector3 pos = {};
+    Vector2 uv = {};
+    Vector3 normal = {};
+    Vector3 tangent = {};
+    Vector4 indices = {};
+    Vector4 weights = {};
+};
+
+struct InstanceData
+{
+    Matrix world = XMMatrixIdentity();
+    UINT   index = 0;
 };

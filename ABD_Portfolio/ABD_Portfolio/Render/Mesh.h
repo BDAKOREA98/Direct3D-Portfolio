@@ -8,17 +8,17 @@ public:
 	~Mesh();
 
 	void SetMesh(D3D11_PRIMITIVE_TOPOLOGY type = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	
+
 	void UpdateVertex(void* data, UINT count) { vertexBuffer->UpdateVertex(data, count); }
 
 private:
 	VertexBuffer* vertexBuffer;
-	 IndexBuffer*  indexBuffer;
+	IndexBuffer* indexBuffer;
 };
 
 template<typename T>
 inline Mesh::Mesh(vector<T>& vertices, vector<UINT>& indices)
 {
 	vertexBuffer = new VertexBuffer(vertices);
-	 indexBuffer = new  IndexBuffer( indices);
+	indexBuffer = new  IndexBuffer(indices);
 }

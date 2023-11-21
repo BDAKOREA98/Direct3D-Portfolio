@@ -1,7 +1,7 @@
 #include "framework.h"
-#include "ComputeShader.h"
+#include "GeometryShader.h"
 
-ComputeShader::ComputeShader(wstring file)
+GeometryShader::GeometryShader(wstring file)
 {
     DWORD flags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG;
 
@@ -11,14 +11,14 @@ ComputeShader::ComputeShader(wstring file)
         nullptr,
         D3D_COMPILE_STANDARD_FILE_INCLUDE,
         "main",
-        "cs_5_0",
+        "gs_5_0",
         flags,
         0,
         &blob,
         nullptr
     );
 
-    DEVICE->CreateComputeShader
+    DEVICE->CreateGeometryShader
     (
         blob->GetBufferPointer(),
         blob->GetBufferSize(),
@@ -27,12 +27,12 @@ ComputeShader::ComputeShader(wstring file)
     );
 }
 
-ComputeShader::~ComputeShader()
+GeometryShader::~GeometryShader()
 {
     shader->Release();
 }
 
-void ComputeShader::SetShader()
+void GeometryShader::SetShader()
 {
-    DC->CSSetShader(shader, nullptr, 0);
+    DC->GSSetShader(shader, nullptr, 0);
 }

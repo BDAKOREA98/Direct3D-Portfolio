@@ -4,9 +4,9 @@
 TerrainEditorScene::TerrainEditorScene()
 {
 	terrainEditor = new TerrainEditor();
-	terrainEditor->GetMaterial()-> SetDiffuseMap(L"Landscape/FieldStone_DM.tga");
-	terrainEditor->GetMaterial()->SetSpecularMap(L"Landscape/FieldStone_SM.tga");
-	terrainEditor->GetMaterial()->  SetNormalMap(L"Landscape/FieldStone_NM.tga");
+	terrainEditor->GetMaterial()-> SetDiffuseMap(L"Landscape/Stones.png");
+	//terrainEditor->GetMaterial()->SetSpecularMap(L"Landscape/FieldStone_SM.tga");
+	terrainEditor->GetMaterial()->  SetNormalMap(L"Landscape/Stones_normal.png");
 
 	//RawData();
 

@@ -4,10 +4,13 @@
 Transform::Transform()
 {
 	world = XMMatrixIdentity();
+
+	worldBuffer = new WorldBuffer();
 }
 
 Transform::~Transform()
 {
+	delete worldBuffer;
 }
 
 void Transform::Update()
@@ -31,15 +34,15 @@ void Transform::UpdateWorld()
 
 	XMStoreFloat4x4(&fWorld, world);
 
-	right   = Vector3(fWorld._11, fWorld._12, fWorld._13).GetNormalized();
-	up      = Vector3(fWorld._21, fWorld._22, fWorld._23).GetNormalized();
+	right = Vector3(fWorld._11, fWorld._12, fWorld._13).GetNormalized();
+	up = Vector3(fWorld._21, fWorld._22, fWorld._23).GetNormalized();
 	forward = Vector3(fWorld._31, fWorld._32, fWorld._33).GetNormalized();
 
 	XMVECTOR outS, outR, outT;
 
 	XMMatrixDecompose(&outS, &outR, &outT, world);
 
-	globalScale    = outS;
+	globalScale = outS;
 	globalRotation = outR;
 	globalPosition = outT;
 }
@@ -60,4 +63,10 @@ void Transform::Debug()
 
 		ImGui::EndMenu();
 	}
+}
+
+void Transform::SetWorld(int hasAnimation)
+{
+	worldBuffer->SetData(world, hasAnimation);
+	worldBuffer->SetVSBuffer(0);
 }
